@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+/* ── Tailwind v4 Theme Tokens ─────────────────────── */
+@theme {
+  --color-xray-bg:     #080C18;
+  --color-xray-navy:   #0A0E1A;
+  --color-xray-dark:   #0d1526;
+  --color-xray-panel:  #101828;
+  --color-xray-border: #1a2c42;
+  --color-xray-cyan:   #00F5FF;
+  --color-xray-blue:   #4A90FF;
+  --color-xray-amber:  #FFB800;
+  --color-xray-red:    #FF4444;
+  --color-xray-green:  #00FF88;
+
+  --font-family-mono: "JetBrains Mono", "IBM Plex Mono", monospace;
+  --font-family-sans: Inter, system-ui, sans-serif;
+
+  --shadow-neon:        0 0 10px rgba(0, 245, 255, 0.3), 0 0 20px rgba(0, 245, 255, 0.1);
+  --shadow-neon-strong: 0 0 20px rgba(0, 245, 255, 0.7), 0 0 40px rgba(0, 245, 255, 0.3);
+  --shadow-neon-amber:  0 0 10px rgba(255, 184, 0, 0.4),  0 0 20px rgba(255, 184, 0, 0.2);
+  --shadow-neon-red:    0 0 10px rgba(255, 68, 68, 0.4),  0 0 20px rgba(255, 68, 68, 0.2);
+  --shadow-neon-green:  0 0 10px rgba(0, 255, 136, 0.4),  0 0 20px rgba(0, 255, 136, 0.2);
+  --shadow-neon-blue:   0 0 10px rgba(74, 144, 255, 0.4), 0 0 20px rgba(74, 144, 255, 0.2);
+
+  --animate-scan-beam:   scanBeam 3s linear infinite;
+  --animate-sonar-ping:  sonarPing 4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  --animate-glow-pulse:  glowPulse 2s ease-in-out infinite;
+  --animate-gradient-x:  gradientX 4s ease-in-out infinite;
+  --animate-shimmer:     shimmer 1.5s infinite;
+  --animate-amber-flicker: amberFlicker 2s ease-in-out infinite;
+
+  @keyframes scanBeam {
+    0%   { top: -10%; opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 110%; opacity: 0; }
+  }
+  @keyframes sonarPing {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(4.5); opacity: 0;   }
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(0,245,255,0.3), 0 0 20px rgba(0,245,255,0.1); }
+    50%       { box-shadow: 0 0 25px rgba(0,245,255,0.7), 0 0 50px rgba(0,245,255,0.35); }
+  }
+  @keyframes gradientX {
+    0%, 100% { background-position: 0% 50%; }
+    50%       { background-position: 100% 50%; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+  @keyframes amberFlicker {
+    0%, 100% { opacity: 1; }
+    10%, 90% { opacity: 0.95; }
+    20%, 80% { opacity: 0.85; }
+    40%, 60% { opacity: 0.9; }
+    50%      { opacity: 0.8; }
+  }
+  @keyframes scanSweepCard {
+    0%   { top: 0%;   opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+}
+
+/* ── Base ─────────────────────────────────────────── */
+body {
+  background-color: var(--color-xray-bg);
+  background-image: 
+    radial-gradient(ellipse at 50% -20%, rgba(0,245,255,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 50% 120%, rgba(74,144,255,0.05) 0%, transparent 70%);
+  color: white;
+  font-family: var(--font-family-sans);
+  overflow-x: hidden;
+  margin: 0;
+}
+
+/* ── CRT Scan Lines Overlay ───────────────────────── */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  opacity: 0.4;
+  animation: crtScroll 20s linear infinite;
+}
+
+@keyframes crtScroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+/* ── Circuit Board Wireframe Background ───────────── */
+.wireframe-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.6) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ── Glass Panel ──────────────────────────────────── */
+.glass-panel {
+  border-radius: 1.25rem;
+  background: rgba(13, 21, 38, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  box-shadow: 
+    0 10px 40px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* ── Neon Glow Text ───────────────────────────────── */
+.text-glow         { text-shadow: 0 0 10px rgba(0, 245, 255, 0.7), 0 0 20px rgba(0,245,255,0.3); }
+.text-glow-amber   { text-shadow: 0 0 10px rgba(255, 184, 0, 0.7); }
+.text-glow-red     { text-shadow: 0 0 10px rgba(255, 68, 68, 0.7); }
+.text-glow-green   { text-shadow: 0 0 10px rgba(0, 255, 136, 0.7); }
+.text-glow-blue    { text-shadow: 0 0 10px rgba(74, 144, 255, 0.7); }
+
+/* ── Input Validation Shake ────────────────────────── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+.shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+/* ── Repository Chips ─────────────────────────────── */
+.repo-chip {
+  @apply px-3 py-1 rounded-full text-xs font-medium border border-white/10 bg-white/5 
+         hover:bg-cyan-500/10 hover:border-cyan-500/50 hover:text-cyan-400 
+         transition-all duration-200 cursor-pointer flex items-center gap-1.5;
+}
+
+/* ── Error Card Flicker ───────────────────────────── */
+@keyframes errorFlicker {
+  0% { opacity: 1; border-color: rgba(255, 68, 68, 0.4); }
+  5% { opacity: 0.8; border-color: rgba(255, 68, 68, 0.2); }
+  10% { opacity: 1; border-color: rgba(255, 68, 68, 0.5); }
+  15% { opacity: 0.9; border-color: rgba(255, 68, 68, 0.3); }
+  100% { opacity: 1; border-color: rgba(255, 68, 68, 0.4); }
+}
+.error-flicker { animation: errorFlicker 3s infinite; }
+
+/* ── Toast Animation ──────────────────────────────── */
+@keyframes toastSlideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.toast-animation { animation: toastSlideIn 0.3s ease-out forwards; }
+
+/* ── Scan Line Element ────────────────────────────── */
+.scan-line {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, #00F5FF 50%, transparent);
+  box-shadow: 0 0 15px 4px rgba(0, 245, 255, 0.4);
+  animation: scanSweepCard 3.5s linear infinite;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ── Full-screen Scan Beam ────────────────────────── */
+.scan-beam {
+  position: absolute;
+  left: 0; width: 100%;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 245, 255, 0.05) 50%,
+    rgba(0, 245, 255, 0.3) 100%
+  );
+  border-bottom: 2px solid #00F5FF;
+  box-shadow: 
+    0 4px 40px 5px rgba(0, 245, 255, 0.4),
+    0 15px 100px 20px rgba(0, 245, 255, 0.15);
+  animation: scanBeam 3s linear infinite;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ── Pipeline Node ────────────────────────────────── */
+.node-card {
+  border-radius: 1.25rem;
+  background: rgba(13, 21, 38, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  box-shadow: 
+    0 10px 40px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+.node-card-green { border-color: rgba(0, 255, 136, 0.3); box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); }
+.node-card-amber { border-color: rgba(255, 184, 0, 0.3); box-shadow: 0 0 15px rgba(255, 184, 0, 0.1); }
+.node-card-red   { border-color: rgba(255, 68, 68, 0.3);  box-shadow: 0 0 15px rgba(255, 68, 68, 0.1); }
+
+/* ── Custom Scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-xray-bg); }
+::-webkit-scrollbar-thumb { background: #1a2c42; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-xray-cyan); }
+
+/* ── Typography fixes for v4 Theme ────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-sans);
+  font-weight: 700;
+}
+.font-mono {
+  font-family: var(--font-family-mono);
+}
